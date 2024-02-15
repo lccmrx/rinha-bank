@@ -3,7 +3,7 @@ package app
 import (
 	"context"
 
-	"github.com/wyreyx/rinha-bank/internal/api"
+	"github.com/lccmrx/rinha-bank/internal/api"
 	"go.uber.org/fx"
 )
 
@@ -12,7 +12,7 @@ var Version string = "v0.0.1"
 func Start(ctx context.Context, starter any) {
 	fx.New(
 		// disables fx logger
-		fx.NopLogger,
+		// fx.NopLogger,
 
 		fx.Provide(
 			// provide app context
@@ -21,7 +21,7 @@ func Start(ctx context.Context, starter any) {
 			},
 
 			// provide starter API handler
-			starter,
+			fx.Annotate(starter, fx.As(new(api.Api))),
 		),
 
 		fx.Provide(
@@ -38,7 +38,12 @@ func hook() any {
 	return func(ctx context.Context, lc fx.Lifecycle, api api.Api) {
 		lc.Append(fx.Hook{
 			OnStart: func(ctx context.Context) error {
-				go api.Run(ctx)
+				go func() {
+					err := api.Run(ctx)
+					if err != nil {
+						panic(err)
+					}
+				}()
 				return nil
 			},
 			OnStop: func(ctx context.Context) error {

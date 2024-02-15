@@ -4,10 +4,9 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/lccmrx/rinha-bank/internal/app"
+	"github.com/lccmrx/rinha-bank/internal/cmd/server"
 	"github.com/spf13/cobra"
-	"github.com/wyreyx/rinha-bank/internal/app"
-	"github.com/wyreyx/rinha-bank/internal/cmd/grpc"
-	"github.com/wyreyx/rinha-bank/internal/cmd/server"
 )
 
 func NewRoot() *cobra.Command {
@@ -40,7 +39,6 @@ using debit or credit transactions.`,
 	for _, command := range []*cobra.Command{
 		version(),
 		server.Server(),
-		grpc.Grpc(),
 	} {
 		cmd.AddCommand(command)
 	}

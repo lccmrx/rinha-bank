@@ -3,9 +3,9 @@ package server
 import (
 	"context"
 
+	"github.com/lccmrx/rinha-bank/internal/api/http"
+	"github.com/lccmrx/rinha-bank/internal/app"
 	"github.com/spf13/cobra"
-	"github.com/wyreyx/rinha-bank/internal/api/http"
-	"github.com/wyreyx/rinha-bank/internal/app"
 )
 
 func Server() *cobra.Command {
@@ -34,7 +34,7 @@ func start() *cobra.Command {
 			ctx = context.WithValue(ctx, "verbose", verbose)
 			ctx = context.WithValue(ctx, "level", level)
 
-			app.Start(ctx, http.NewServer)
+			app.Start(ctx, http.New)
 		},
 	}
 }

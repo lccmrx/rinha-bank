@@ -32,7 +32,7 @@ ARG TARGETARCH
 RUN --mount=type=cache,target=/go/pkg/mod/ \
     --mount=type=bind,target=. \
     CGO_ENABLED=0 GOARCH=$TARGETARCH go build -o /bin/server ./cmd
-    # go build -C cmd -ldflags "-X 'github.com/wyreyx/rinha-bank/internal/app.Version=v1.0.0'" -o ../bin/main
+    # go build -C cmd -ldflags "-X 'github.com/lccmrx/rinha-bank/internal/app.Version={$VERSION}' -s -w" -o ../bin/main
 
 ################################################################################
 # Create a new stage for running the application that contains the minimal

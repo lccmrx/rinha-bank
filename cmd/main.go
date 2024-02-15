@@ -1,6 +1,6 @@
 package main
 
-import "github.com/wyreyx/rinha-bank/internal/cmd"
+import "github.com/lccmrx/rinha-bank/internal/cmd"
 
 func main() {
 	cmd.NewRoot().Execute()

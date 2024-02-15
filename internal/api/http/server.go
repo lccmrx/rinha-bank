@@ -3,29 +3,37 @@ package http
 import (
 	"context"
 	"fmt"
-	"net/http"
 
-	"github.com/wyreyx/rinha-bank/internal/api"
-	"github.com/wyreyx/rinha-bank/internal/infra/config"
-	"go.uber.org/fx"
+	"github.com/labstack/echo/v4"
+	"github.com/lccmrx/rinha-bank/internal/api"
+	"github.com/lccmrx/rinha-bank/internal/infra/config"
 )
 
 type Server struct {
-	*http.Server
+	e *echo.Echo
 }
 
-func NewServer(lc fx.Lifecycle, cfg *config.Config, ctx context.Context) api.Api {
-	fmt.Println(1)
-	srv := &Server{Server: &http.Server{Addr: ":8080"}}
-	fmt.Println(ctx.Value("verbose").(bool))
-	return srv
+var _ api.Api = (*Server)(nil)
+
+func New(cfg *config.Config, controllerManager *ControllerManager) *Server {
+	server := &Server{
+		e: echo.New(),
+	}
+
+	server.setupMiddlewares()
+	server.setupRoutes(controllerManager)
+
+	server.e.Server.Addr = fmt.Sprintf(":%d", cfg.Server.Port)
+
+	server.e.HidePort = true
+	server.e.HideBanner = true
+	return server
 }
 
 func (s *Server) Run(ctx context.Context) error {
-	return s.ListenAndServe()
+	return s.e.Start(s.e.Server.Addr)
 }
 
 func (s *Server) Shutdown(ctx context.Context) error {
-	fmt.Println("Shutting down...")
-	return s.Server.Shutdown(ctx)
+	return s.e.Shutdown(ctx)
 }

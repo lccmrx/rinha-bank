@@ -1,11 +1,16 @@
 package app
 
 import (
-	"github.com/wyreyx/rinha-bank/internal/infra/config"
+	"github.com/lccmrx/rinha-bank/internal/api/http"
+	"github.com/lccmrx/rinha-bank/internal/infra/config"
 )
 
 func providers() []any {
-	return []any{
+	globalDeps := []any{
 		config.New,
+		http.NewControllerManager,
 	}
+
+	globalDeps = append(globalDeps, http.ControllersList...)
+	return globalDeps
 }
