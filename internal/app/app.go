@@ -12,7 +12,7 @@ var Version string = "v0.0.1"
 func Start(ctx context.Context, starter any) {
 	fx.New(
 		// disables fx logger
-		// fx.NopLogger,
+		fx.NopLogger,
 
 		fx.Provide(
 			// provide app context

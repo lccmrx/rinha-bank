@@ -14,4 +14,10 @@ func setDefaults() {
 	viper.SetDefault("database.user", "postgres")
 	viper.SetDefault("database.password", "postgres")
 	viper.SetDefault("database.database", "rinha-bank")
+
+	viper.SetDefault("cache.host", "localhost")
+	viper.SetDefault("cache.port", 6379)
+	viper.SetDefault("cache.db", 0)
+	viper.SetDefault("cache.pass", "")
+	viper.SetDefault("cache.prefix", "rinha-bank")
 }

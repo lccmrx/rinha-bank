@@ -4,6 +4,7 @@ type Config struct {
 	App      App      `mapstructure:"app"`
 	Server   Server   `mapstructure:"server"`
 	Database Database `mapstructure:"database"`
+	Cache    Cache    `mapstructure:"cache"`
 }
 
 type App struct {
@@ -22,4 +23,12 @@ type Database struct {
 	User     string `mapstructure:"user"`
 	Password string `mapstructure:"password"`
 	Database string `mapstructure:"database"`
+}
+
+type Cache struct {
+	Host   string `mapstructure:"host"`
+	Port   int    `mapstructure:"port"`
+	DB     int    `mapstructure:"db"`
+	Pass   string `mapstructure:"pass"`
+	Prefix string `mapstructure:"prefix"`
 }
