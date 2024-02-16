@@ -28,7 +28,7 @@ func (t *Transaction) Save(tx *domain.Transaction) error {
 	return nil
 }
 
-func (t *Transaction) GetTransactionsByClientID(clientID int) (transactions []*domain.Transaction, err error) {
+func (t *Transaction) GetTransactionsByClientID(clientID string) (transactions []*domain.Transaction, err error) {
 	var models []TransactionModel
 	err = t.Conn.Select(&models, "SELECT * FROM transaction WHERE client_id = $1 order by timestamp desc limit 10", clientID)
 	if err != nil {

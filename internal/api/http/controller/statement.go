@@ -22,7 +22,6 @@ func (s *Statement) Get(ctx echo.Context) (err error) {
 	var clientID = ctx.Param("id")
 
 	client, transactions, err := s.service.GetStatement(clientID)
-
 	if err != nil {
 		return ctx.String(404, err.Error())
 	}

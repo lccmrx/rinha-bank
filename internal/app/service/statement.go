@@ -2,38 +2,29 @@ package service
 
 import (
 	"fmt"
-	"strconv"
 
 	"github.com/lccmrx/rinha-bank/internal/domain"
-	"github.com/lccmrx/rinha-bank/internal/infra/cache"
 	"github.com/lccmrx/rinha-bank/internal/infra/database"
 	"github.com/pkg/errors"
 )
 
 type Statement struct {
-	repo  database.DataManager
-	cache cache.Cache
+	repo database.DataManager
 }
 
-func NewStatement(data database.DataManager, cache cache.Cache) *Statement {
+func NewStatement(data database.DataManager) *Statement {
 	return &Statement{
-		repo:  data,
-		cache: cache,
+		repo: data,
 	}
 }
 
 func (s *Statement) GetStatement(clientID string) (client *domain.Client, transactions []*domain.Transaction, err error) {
-	lockKey := fmt.Sprintf("lock:%s", clientID)
-	s.cache.AcquireLock(lockKey)
-	defer s.cache.ReleaseLock(lockKey)
-
-	cID, _ := strconv.Atoi(clientID)
-	client, err = s.repo.Client().FindByID(cID)
+	client, err = s.repo.Client().FindByID(clientID)
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "not found")
 	}
 
-	transactions, err = s.repo.Transaction().GetTransactionsByClientID(client.ID)
+	transactions, err = s.repo.Transaction().GetTransactionsByClientID(fmt.Sprintf("%d", client.ID))
 	if err != nil {
 		return nil, nil, errors.Wrap(err, "not found")
 	}

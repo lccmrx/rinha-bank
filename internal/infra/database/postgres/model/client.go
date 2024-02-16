@@ -17,9 +17,9 @@ type ClientModel struct {
 	Balance      int `db:"balance"`
 }
 
-func (c *Client) FindByID(id int) (client *domain.Client, err error) {
+func (c *Client) FindByID(id string) (client *domain.Client, err error) {
 	var models []ClientModel
-	err = c.Conn.Select(&models, "SELECT * FROM client WHERE id = $1 limit 1", id)
+	err = c.Conn.Select(&models, "SELECT * FROM client WHERE id = $1 limit 1 FOR UPDATE", id)
 	if err != nil {
 		return nil, err
 	}

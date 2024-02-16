@@ -1,12 +1,8 @@
 package service
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/lccmrx/rinha-bank/internal/api/http/dto"
 	"github.com/lccmrx/rinha-bank/internal/domain"
-	"github.com/lccmrx/rinha-bank/internal/infra/cache"
 	"github.com/lccmrx/rinha-bank/internal/infra/database"
 	"github.com/lccmrx/rinha-bank/internal/service"
 	"github.com/pkg/errors"
@@ -15,24 +11,23 @@ import (
 type Transaction struct {
 	service *service.Transaction
 	repo    database.DataManager
-	cache   cache.Cache
 }
 
-func NewTransaction(service *service.Transaction, data database.DataManager, cache cache.Cache) *Transaction {
+func NewTransaction(service *service.Transaction, data database.DataManager) *Transaction {
 	return &Transaction{
 		service: service,
 		repo:    data,
-		cache:   cache,
 	}
 }
 
 func (s *Transaction) Create(input dto.TransactionInput, clientID string) (client *domain.Client, err error) {
-	lockKey := fmt.Sprintf("lock:%s", clientID)
-	s.cache.AcquireLock(lockKey)
-	defer s.cache.ReleaseLock(lockKey)
+	tx, err := s.repo.Begin()
+	defer tx.Rollback()
+	if err != nil {
+		return nil, errors.Wrap(err, "begin transaction")
+	}
 
-	cID, _ := strconv.Atoi(clientID)
-	client, err = s.repo.Client().FindByID(cID)
+	client, err = tx.Client().FindByID(clientID)
 	if err != nil {
 		return nil, errors.Wrap(err, "not found")
 	}
@@ -52,7 +47,9 @@ func (s *Transaction) Create(input dto.TransactionInput, clientID string) (clien
 		return nil, errors.Wrap(err, "invalid")
 	}
 
-	s.repo.Transaction().Save(transaction)
-	s.repo.Client().Save(client)
+	tx.Transaction().Save(transaction)
+	tx.Client().Save(client)
+
+	tx.Commit()
 	return client, nil
 }

@@ -8,5 +8,9 @@
         "database": "postgres",
         "user": "postgres",
         "password": "mysecretpassword"
+    },
+    "cache": {
+        "host": "localhost",
+        "port": 6380
     }
 }

@@ -41,8 +41,8 @@ func (t *TransactionParams) Validate() error {
 		return errors.New("value must be greater than 0")
 	}
 
-	if t.Description == "" {
-		return errors.New("description must not be empty")
+	if t.Description == "" || len(t.Description) > 10 {
+		return errors.New("description must not be empty or bigger than 10 characters")
 	}
 
 	return nil
