@@ -7,7 +7,10 @@ import (
 func (s *Server) setupMiddlewares() {
 	s.e.Pre(middleware.AddTrailingSlash())
 
-	// s.e.Use(middleware.RequestID())
+	s.e.Use(middleware.RequestID())
+	s.e.Use(middleware.LoggerWithConfig(middleware.LoggerConfig{
+		Format: "id=${id} method=${method}, uri=${uri}, status=${status} latency_human=${latency_human}\n",
+	}))
 	// s.e.Use(middleware.Gzip())
 	// s.e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
 	// 	fmt.Println("request", c.Response().Header().Get(echo.HeaderXRequestID), "path", c.Request().URL, "body", string(reqBody))

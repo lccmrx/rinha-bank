@@ -13,11 +13,11 @@ import (
 
 func providers() []any {
 	globalDeps := []any{
+		usecase.NewTransaction,
 		config.New,
 		http.NewControllerManager,
 		fx.Annotate(postgres.Instance, fx.As(new(database.DataManager))),
 
-		usecase.NewTransaction,
 		usecase.NewStatement,
 
 		service.NewTransaction,

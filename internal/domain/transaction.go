@@ -18,22 +18,22 @@ var validTransactionTypes = map[string]TransactionType{
 }
 
 type Transaction struct {
-	ClientID        int             `json:"client-id"`
-	TransactionType TransactionType `json:"transaction-type"`
-	Value           int             `json:"value"`
-	Description     string          `json:"description"`
-	Timestamp       time.Time       `json:"timestamp"`
+	ClientID    int             `json:"client-id"`
+	Type        TransactionType `json:"type"`
+	Value       int             `json:"value"`
+	Description string          `json:"description"`
+	Timestamp   time.Time       `json:"timestamp"`
 }
 
 type TransactionParams struct {
-	ClientID        int    `json:"client-id"`
-	TransactionType string `json:"transaction-type"`
-	Value           int    `json:"value"`
-	Description     string `json:"description"`
+	ClientID    int    `json:"client-id"`
+	Type        string `json:"type"`
+	Value       int    `json:"value"`
+	Description string `json:"description"`
 }
 
 func (t *TransactionParams) Validate() error {
-	if _, ok := validTransactionTypes[t.TransactionType]; !ok {
+	if _, ok := validTransactionTypes[t.Type]; !ok {
 		return errors.New("invalid transaction type")
 	}
 
@@ -55,10 +55,10 @@ func NewTransaction(params TransactionParams) (*Transaction, error) {
 	}
 
 	return &Transaction{
-		ClientID:        params.ClientID,
-		TransactionType: TransactionType(params.TransactionType),
-		Value:           params.Value,
-		Description:     params.Description,
-		Timestamp:       time.Now(),
+		ClientID:    params.ClientID,
+		Type:        TransactionType(params.Type),
+		Value:       params.Value,
+		Description: params.Description,
+		Timestamp:   time.Now(),
 	}, nil
 }

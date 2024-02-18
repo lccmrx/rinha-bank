@@ -43,7 +43,7 @@ func (c *Transaction) Create(ctx echo.Context) (err error) {
 	}
 
 	return ctx.JSON(200, dto.TransactionOutput{
-		Limit:   client.AccountLimit,
+		Limit:   client.Limit,
 		Balance: client.Balance,
 	})
 }

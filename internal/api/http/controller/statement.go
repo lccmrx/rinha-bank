@@ -30,7 +30,7 @@ func (s *Statement) Get(ctx echo.Context) (err error) {
 	for _, t := range transactions {
 		transaction := dto.StatementTransactionOutput{
 			Value:       t.Value,
-			Type:        string(t.TransactionType),
+			Type:        string(t.Type),
 			Description: t.Description,
 			Timestamp:   t.Timestamp.Format(time.RFC3339Nano),
 		}
@@ -41,7 +41,7 @@ func (s *Statement) Get(ctx echo.Context) (err error) {
 		Balance: dto.StatementBalanceOutput{
 			Total:         client.Balance,
 			StatementDate: time.Now().Format(time.RFC3339Nano),
-			Limit:         client.AccountLimit,
+			Limit:         client.Limit,
 		},
 		Transactions: transactionsOutput,
 	})

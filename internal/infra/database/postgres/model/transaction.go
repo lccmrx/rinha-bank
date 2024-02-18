@@ -20,7 +20,7 @@ type TransactionModel struct {
 }
 
 func (t *Transaction) Save(tx *domain.Transaction) error {
-	_, err := t.Conn.Exec("INSERT INTO transaction (client_id, value, type, description) VALUES ($1, $2, $3, $4)", tx.ClientID, tx.Value, tx.TransactionType, tx.Description)
+	_, err := t.Conn.Exec("INSERT INTO transaction (client_id, value, type, description) VALUES ($1, $2, $3, $4)", tx.ClientID, tx.Value, tx.Type, tx.Description)
 	if err != nil {
 		return err
 	}
@@ -30,7 +30,7 @@ func (t *Transaction) Save(tx *domain.Transaction) error {
 
 func (t *Transaction) GetTransactionsByClientID(clientID string) (transactions []*domain.Transaction, err error) {
 	var models []TransactionModel
-	err = t.Conn.Select(&models, "SELECT * FROM transaction WHERE client_id = $1 order by timestamp desc limit 10", clientID)
+	err = t.Conn.Select(&models, "SELECT * FROM transaction t WHERE client_id = $1 order by timestamp desc limit 10", clientID)
 	if err != nil {
 		return nil, err
 	}
@@ -39,11 +39,11 @@ func (t *Transaction) GetTransactionsByClientID(clientID string) (transactions [
 		parsedTime, _ := time.Parse(time.RFC3339Nano, model.Timestamp)
 
 		transaction := &domain.Transaction{
-			ClientID:        model.ClientID,
-			Value:           model.Value,
-			TransactionType: domain.TransactionType(model.TransactionType),
-			Description:     model.Description,
-			Timestamp:       parsedTime,
+			ClientID:    model.ClientID,
+			Value:       model.Value,
+			Type:        domain.TransactionType(model.TransactionType),
+			Description: model.Description,
+			Timestamp:   parsedTime,
 		}
 		transactions = append(transactions, transaction)
 	}

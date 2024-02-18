@@ -12,14 +12,14 @@ type Client struct {
 }
 
 type ClientModel struct {
-	ID           int `db:"id"`
-	AccountLimit int `db:"account_limit"`
-	Balance      int `db:"balance"`
+	ID      int `db:"id"`
+	Limit   int `db:"limit"`
+	Balance int `db:"balance"`
 }
 
 func (c *Client) FindByID(id string) (client *domain.Client, err error) {
 	var models []ClientModel
-	err = c.Conn.Select(&models, "SELECT * FROM client WHERE id = $1 limit 1 FOR UPDATE", id)
+	err = c.Conn.Select(&models, "SELECT * FROM client WHERE id = $1 for update", id)
 	if err != nil {
 		return nil, err
 	}
@@ -31,9 +31,9 @@ func (c *Client) FindByID(id string) (client *domain.Client, err error) {
 	model := models[0]
 
 	client = &domain.Client{
-		ID:           model.ID,
-		AccountLimit: model.AccountLimit,
-		Balance:      model.Balance,
+		ID:      model.ID,
+		Limit:   model.Limit,
+		Balance: model.Balance,
 	}
 
 	return client, nil

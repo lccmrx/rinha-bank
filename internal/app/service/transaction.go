@@ -33,10 +33,10 @@ func (s *Transaction) Create(input dto.TransactionInput, clientID string) (clien
 	}
 
 	transaction, err := domain.NewTransaction(domain.TransactionParams{
-		ClientID:        client.ID,
-		Value:           input.Value,
-		TransactionType: input.Type,
-		Description:     input.Description,
+		ClientID:    client.ID,
+		Value:       input.Value,
+		Type:        input.Type,
+		Description: input.Description,
 	})
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid")

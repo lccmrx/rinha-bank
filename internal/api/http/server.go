@@ -25,7 +25,7 @@ func New(cfg *config.Config, controllerManager *ControllerManager) *Server {
 
 	server.e.Server.Addr = fmt.Sprintf(":%d", cfg.Server.Port)
 
-	server.e.HidePort = true
+	// server.e.HidePort = true
 	server.e.HideBanner = true
 	return server
 }

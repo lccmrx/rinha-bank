@@ -1,6 +1,6 @@
 {
     "server": {
-        "port": 4000
+        "port": 9999
     },
     "database": {
         "host": "localhost",
@@ -8,9 +8,5 @@
         "database": "postgres",
         "user": "postgres",
         "password": "mysecretpassword"
-    },
-    "cache": {
-        "host": "localhost",
-        "port": 6380
     }
 }
